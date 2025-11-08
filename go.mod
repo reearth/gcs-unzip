@@ -1,8 +1,6 @@
 module github.com/orisano/gcs-unzip
 
-go 1.22.7
-
-toolchain go1.23.0
+go 1.25
 
 require (
 	cloud.google.com/go/storage v1.48.0
@@ -65,7 +63,7 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20241209162323-e6fa225c2576 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241209162323-e6fa225c2576 // indirect
 	google.golang.org/grpc v1.68.1 // indirect
-	google.golang.org/grpc/stats/opentelemetry v0.0.0-20241028142157-ada6787961b3 // indirect
+	google.golang.org/grpc/stats/opentelemetry v0.0.0-20240907200651-3ffb98b2c93a // indirect
 	google.golang.org/protobuf v1.35.2 // indirect
 )
 
