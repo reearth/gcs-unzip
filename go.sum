@@ -90,6 +90,8 @@ github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 h1:Jamvg5psRI
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/reearth/compressible/go v0.0.0-20260511113429-5c81bd23e26d h1:yeR0OO3QVZleejh4LIJFbLiTj0s/UGKdcYi6tifpGUA=
 github.com/reearth/compressible/go v0.0.0-20260511113429-5c81bd23e26d/go.mod h1:xi9lbnuC33o/T8AFyJiHII7VAKFW77ELazYROLqhVCI=
+github.com/reearth/compressible/go v0.1.2 h1:Jw1D/zwAgp02URfZ7u1wMbyEcWkr6YkVoU5QQCD4N3k=
+github.com/reearth/compressible/go v0.1.2/go.mod h1:xi9lbnuC33o/T8AFyJiHII7VAKFW77ELazYROLqhVCI=
 github.com/spf13/afero v1.15.0 h1:b/YBCLWAJdFWJTN9cLhiXXcD7mzKn9Dm86dNnfyQw1I=
 github.com/spf13/afero v1.15.0/go.mod h1:NC2ByUVxtQs4b3sIUphxK0NioZnmxgyCrfzeuq8lxMg=
 github.com/spiffe/go-spiffe/v2 v2.6.0 h1:l+DolpxNWYgruGQVV0xsfeya3CsC7m8iBzDnMpsbLuo=
