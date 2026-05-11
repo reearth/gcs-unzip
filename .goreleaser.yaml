@@ -32,5 +32,5 @@ changelog:
       - '^test:'
 dockers:
   - image_templates:
-    - "ghcr.io/orisano/gcs-unzip:latest"
-    - "ghcr.io/orisano/gcs-unzip:{{ .Tag }}"
+    - "ghcr.io/reearth/gcs-unzip:latest"
+    - "ghcr.io/reearth/gcs-unzip:{{ .Tag }}"
