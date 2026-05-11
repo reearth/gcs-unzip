@@ -1,5 +1,3 @@
-//go:generate go run gen.go
-
 package main
 
 import (
@@ -24,6 +22,7 @@ import (
 
 	"cloud.google.com/go/storage"
 	"github.com/klauspost/compress/gzip"
+	"github.com/reearth/compressible/go"
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/sync/semaphore"
 )
@@ -107,17 +106,20 @@ func run() error {
 			return make([]byte, *bufSize)
 		},
 	}
-	useGzip := map[string]bool{}
-	if !*noGzip {
-		if *gzipExt != "" {
-			for _, ext := range strings.Split(*gzipExt, ",") {
-				useGzip["."+strings.ToLower(strings.TrimPrefix(ext, "."))] = true
-			}
-		} else {
-			for ext := range compressibleExts {
-				useGzip["."+ext] = true
-			}
+	var shouldGzip func(ext string) bool
+	switch {
+	case *noGzip:
+		shouldGzip = func(string) bool { return false }
+	case *gzipExt != "":
+		overrides := map[string]bool{}
+		for _, ext := range strings.Split(*gzipExt, ",") {
+			overrides[strings.ToLower(strings.TrimPrefix(ext, "."))] = true
 		}
+		shouldGzip = func(ext string) bool {
+			return overrides[strings.ToLower(strings.TrimPrefix(ext, "."))]
+		}
+	default:
+		shouldGzip = compressible.Ext
 	}
 	var metadata map[string]string
 	if *gcsMetadata != "" {
@@ -159,7 +161,7 @@ func run() error {
 
 		var w io.Writer
 		var closeWriter func() error
-		if useGzip[strings.ToLower(filepath.Ext(f))] {
+		if shouldGzip(filepath.Ext(f)) {
 			if sniff, err := io.ReadAll(io.NewSectionReader(r, 0, 512)); err == nil {
 				ow.ContentType = http.DetectContentType(sniff)
 			}

@@ -89,40 +89,20 @@ Options:
 
 ## Gzip compression
 
-By default, gcs-unzip uploads files whose extensions appear in a
-built-in compressible list (see below) with `Content-Encoding: gzip`.
+By default, gcs-unzip uploads files whose extensions are known to
+benefit from gzip compression with `Content-Encoding: gzip`. The list
+of compressible extensions is provided by
+[`reearth/compressible`](https://github.com/reearth/compressible),
+which is curated from `jshttp/mime-db` with additions for 3D Tiles
+(`b3dm`, `i3dm`, `pnts`, `cmpt`, `subtree`), Cesium quantized-mesh
+terrain (`terrain`), and `bin`.
+
 This behavior can be customized:
 
 - `-gzip-ext js,css,html` — override the built-in list with an explicit
   set of extensions (the leading dot is optional).
 - `-no-gzip` — disable gzip compression entirely; every file is
   uploaded as-is.
-
-## Development
-
-### Regenerating the compressible extensions list
-
-`compressible_ext.go` contains the default set of file extensions whose
-contents typically benefit from gzip compression. It is generated from
-the [`jshttp/mime-db`](https://github.com/jshttp/mime-db) dataset by
-filtering entries with `compressible: true`, excluding MIME types whose
-payloads are already compressed or are container archives (e.g.
-`application/octet-stream`, `application/x-tar`, VM disk images,
-Photoshop, DDS textures), and adding a few extra extensions that are
-not covered by mime-db but are known to compress well:
-
-- `bin`
-- 3D Tiles: `b3dm`, `i3dm`, `pnts`, `cmpt`, `subtree`
-- Cesium quantized-mesh terrain: `terrain`
-
-To regenerate the list (e.g. after a `mime-db` update):
-
-```shell
-go generate ./...
-```
-
-The generator lives in `gen.go` (built with `//go:build ignore`) and
-fetches the latest `mime-db` data from the upstream repository.
 
 ## License
 This project is licensed under the MIT License.
