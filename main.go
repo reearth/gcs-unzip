@@ -1,3 +1,5 @@
+//go:generate go run gen.go
+
 package main
 
 import (
@@ -41,7 +43,8 @@ func run() error {
 	gcInterval := flag.Int("gc", 0, "gc interval")
 	diskLimit := flagBytes("disk-limit", 50*1024*1024*1024, "disk limit")
 	tmpDir := flag.String("tmp-dir", "", "temporary directory")
-	gzipExt := flag.String("gzip-ext", "", "comma-separated list of file extensions to gzip before uploading")
+	gzipExt := flag.String("gzip-ext", "", "comma-separated list of file extensions to gzip before uploading (overrides the built-in compressible list)")
+	noGzip := flag.Bool("no-gzip", false, "disable gzip compression entirely")
 	withMeta := flag.Bool("with-meta", false, "")
 	skipTop := flag.Bool("skip-top", false, "")
 	oldWindows := flag.Bool("old-windows", false, "")
@@ -105,9 +108,15 @@ func run() error {
 		},
 	}
 	useGzip := map[string]bool{}
-	if *gzipExt != "" {
-		for _, ext := range strings.Split(*gzipExt, ",") {
-			useGzip["."+strings.ToLower(ext)] = true
+	if !*noGzip {
+		if *gzipExt != "" {
+			for _, ext := range strings.Split(*gzipExt, ",") {
+				useGzip["."+strings.ToLower(strings.TrimPrefix(ext, "."))] = true
+			}
+		} else {
+			for ext := range compressibleExts {
+				useGzip["."+ext] = true
+			}
 		}
 	}
 	var metadata map[string]string

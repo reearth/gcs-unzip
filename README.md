@@ -71,6 +71,9 @@ Options:
     Metadata (comma separated key=value pairs)
   -gzip-ext string
     Comma-separated list of file extensions to gzip before uploading
+    (overrides the built-in compressible list)
+  -no-gzip
+    Disable gzip compression entirely
   -n int
     Number of goroutines for uploading (default 24)
   -old-windows
@@ -83,6 +86,43 @@ Options:
   -with-meta
     Include metadata files (like .DS_Store, __MACOSX, etc.)
 ```
+
+## Gzip compression
+
+By default, gcs-unzip uploads files whose extensions appear in a
+built-in compressible list (see below) with `Content-Encoding: gzip`.
+This behavior can be customized:
+
+- `-gzip-ext js,css,html` — override the built-in list with an explicit
+  set of extensions (the leading dot is optional).
+- `-no-gzip` — disable gzip compression entirely; every file is
+  uploaded as-is.
+
+## Development
+
+### Regenerating the compressible extensions list
+
+`compressible_ext.go` contains the default set of file extensions whose
+contents typically benefit from gzip compression. It is generated from
+the [`jshttp/mime-db`](https://github.com/jshttp/mime-db) dataset by
+filtering entries with `compressible: true`, excluding MIME types whose
+payloads are already compressed or are container archives (e.g.
+`application/octet-stream`, `application/x-tar`, VM disk images,
+Photoshop, DDS textures), and adding a few extra extensions that are
+not covered by mime-db but are known to compress well:
+
+- `bin`
+- 3D Tiles: `b3dm`, `i3dm`, `pnts`, `cmpt`, `subtree`
+- Cesium quantized-mesh terrain: `terrain`
+
+To regenerate the list (e.g. after a `mime-db` update):
+
+```shell
+go generate ./...
+```
+
+The generator lives in `gen.go` (built with `//go:build ignore`) and
+fetches the latest `mime-db` data from the upstream repository.
 
 ## License
 This project is licensed under the MIT License.
