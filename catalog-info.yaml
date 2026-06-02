@@ -1,0 +1,17 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: gcs-unzip
+  namespace: reearth
+  annotations:
+    github.com/project-slug: reearth/gcs-unzip
+  links:
+  - url: https://github.com/reearth/gcs-unzip
+    title: GitHub
+    icon: github
+  tags:
+  - go
+spec:
+  type: service
+  lifecycle: experimental
+  owner: reearth/lib
